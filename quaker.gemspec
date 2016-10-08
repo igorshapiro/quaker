@@ -9,8 +9,13 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Igor Shapiro"]
   spec.email         = ["shapigor@gmail.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
+  spec.summary       = %q{Preprocessor for docker-compose}
+  spec.description   = %q{
+    Extend docker-compose by adding support to:
+    - include files
+    - run services (and their dependencies) by tag
+    - automatically detect service directories by git repository
+  }
   spec.homepage      = "TODO: Put your gem's website or public repo URL here."
   spec.license       = "MIT"
 

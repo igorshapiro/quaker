@@ -1,41 +1,61 @@
 # Quaker
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/quaker`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Extend docker-compose by adding support to:
+- include files
+- run services (and their dependencies) by tag
+- automatically detect service directories by git repository
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'quaker'
+```
+gem install quaker
 ```
 
-And then execute:
+## Example
 
-    $ bundle
+### Given:
 
-Or install it yourself as:
+```
+# docker/services/infra.yml
+redis:
+  image: redis
+  links:
+    - mongo
+mongo:
+  image: mongo
+postgres:
+  image: postgres
+```
 
-    $ gem install quaker
+```
+# docker/services/all.yml
+include:
+  - infra.yml
+svc1:
+  depends_on:
+    - redis
+  tags:
+    - svc1
+svc2:
+  depends_on:
+    - mongo
+  tags:
+    - svc2
 
-## Usage
+```
 
-TODO: Write usage instructions here
+### Generating docker-compose file
 
-## Development
+```
+quaker -t svc1
+```
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake rspec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+will generate a docker compose consisting only of `svc1` and `redis`.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+`Note:` generated docker-compose will be written to stdout
 
-## Contributing
+### Using the generated docker-compose.yml
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/quaker.
-
-
-## License
-
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
+```
+quaker -t svc1 | docker-compose -f - up(/down)
+```
