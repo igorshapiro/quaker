@@ -1,5 +1,6 @@
 [![Code Climate](https://codeclimate.com/github/igorshapiro/quaker/badges/gpa.svg)](https://codeclimate.com/github/igorshapiro/quaker)
 [![Gem Version](https://badge.fury.io/rb/quaker.svg)](https://badge.fury.io/rb/quaker)
+[![CircleCI](https://circleci.com/gh/igorshapiro/quaker.svg?style=svg)](https://circleci.com/gh/igorshapiro/quaker)
 
 # Quaker
 
