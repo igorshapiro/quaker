@@ -27,7 +27,7 @@ module Quaker
       end
 
       def execute
-        dump_params
+        # dump_params
 
         Dir.chdir dir
 
