@@ -9,7 +9,6 @@ class TagFilter
     return services_map if !tags_list || tags_list.empty?
 
     services_map.inject({}){|acc, (name, spec)|
-      puts "#{name} => #{spec}"
       svc_tags = spec["tags"] || []
       spec.delete("tags")
       common = svc_tags & tags_list

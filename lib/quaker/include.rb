@@ -7,8 +7,9 @@ class Include
     spec = YAML.load(File.read(filepath))
     return spec unless spec.has_key?(INCLUDE_KEY)
 
-    spec.delete(INCLUDE_KEY).inject(spec) { |acc, file|
-      spec.merge(process File.expand_path(file, dir))
-    }
+    spec
+      .delete(INCLUDE_KEY)
+      .map {|file| File.expand_path(file, dir) }
+      .inject(spec) { |acc, file| acc.merge(process file) }
   end
 end
