@@ -16,7 +16,6 @@ class GitResolver
 
   def resolve services_map
     for name, spec in services_map
-      puts spec
       git_repo = spec.delete("git")
       next unless git_repo
 

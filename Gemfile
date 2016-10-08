@@ -4,3 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'clamp'
+
+group :test do
+  gem 'simplecov'
+end
