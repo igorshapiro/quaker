@@ -1,3 +1,5 @@
+[![Code Climate](https://codeclimate.com/github/igorshapiro/quaker/badges/gpa.svg)](https://codeclimate.com/github/igorshapiro/quaker)
+
 # Quaker
 
 Extend docker-compose by adding support to:
