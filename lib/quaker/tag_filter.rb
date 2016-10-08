@@ -19,12 +19,14 @@ class TagFilter
     return services_map if !tags_list || tags_list.empty?
 
     services_map.inject({}){|acc, (name, spec)|
-      return acc unless is_tagged_service(spec, tags_list)
+      if is_tagged_service(spec, tags_list)
+        acc[name] = spec
 
-      acc[name] = spec
+        dependencies(services_map, name)
+          .inject(acc){|acc, d| acc.update(d => services_map[d])}
+      end
 
-      dependencies(services_map, name)
-        .inject(acc){|acc, d| acc.update(d => services_map[d])}
+      acc
     }
   end
 end
