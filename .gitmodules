@@ -1,0 +1,3 @@
+[submodule "examples/svc1"]
+	path = examples/svc1
+	url = https://github.com/igorshapiro/quaker-svc1.git

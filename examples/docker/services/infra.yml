@@ -1,0 +1,6 @@
+redis:
+  image: redis
+mongo:
+  image: mongo
+postgres:
+  image: postgres

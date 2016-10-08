@@ -1,0 +1,10 @@
+include:
+  - infra.yml
+svc1:
+  git: https://github.com/igorshapiro/quaker-svc1.git
+  links:
+    - mongo
+  depends_on:
+    - redis
+  tags:
+    - svc1
