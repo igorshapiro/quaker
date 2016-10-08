@@ -1,27 +1,30 @@
 class TagFilter
   def dependencies services_map, name
     spec = services_map[name]
-    deps = (spec["depends_on"] || []) + (spec["links"] || []).map{|l| l.split(':')[0]}
+    depends_on = spec["depends_on"] || []
+    links = (spec["links"] || []).map{|l| l.split(':')[0]}
+    deps = links + depends_on
     deps + deps.map{|d| dependencies(services_map, d)}.flatten
+  end
+
+  def is_tagged_service spec, tags_list
+    svc_tags = spec.delete("tags") || []
+
+    # Skip service if no common tags
+    common = svc_tags & tags_list
+    common && !common.empty?
   end
 
   def filter services_map, tags_list
     return services_map if !tags_list || tags_list.empty?
 
     services_map.inject({}){|acc, (name, spec)|
-      svc_tags = spec["tags"] || []
-      spec.delete("tags")
-      common = svc_tags & tags_list
-      if common && !common.empty?
-        acc[name] = spec
+      return acc unless is_tagged_service(spec, tags_list)
 
-        deps = dependencies(services_map, name) || []
-        deps
-          .select {|d| !acc.has_key?(d)}
-          .each{|d| acc[d] = services_map[d]}
-      end
+      acc[name] = spec
 
-      acc
+      dependencies(services_map, name)
+        .inject(acc){|acc, d| acc.update(d => services_map[d])}
     }
   end
 end
