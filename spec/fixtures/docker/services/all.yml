@@ -1,0 +1,24 @@
+---
+include:
+- infra.yml
+warehouse:
+  links:
+    - mongo
+  tags:
+  - backend
+  - warehouse
+billing:
+  git: git@github.com:igorshapiro/quaker-svc1.git
+  links:
+    - postgres
+  tags:
+  - backend
+  - billing
+web:
+  git: https://github.com/igorshapiro/quaker-svc1.git
+  links:
+    - redis
+  tags:
+  - warehouse
+  - billing
+  - ui

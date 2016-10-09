@@ -21,7 +21,7 @@ class GitResolver
 
       dir = find_dir_for_repo git_repo
 
-      puts "ERROR: Unable to find dir for repo #{git_repo}" and return unless dir
+      STDERR.puts "ERROR: Unable to find dir for repo #{git_repo}" and return unless dir
 
       spec["build"] = dir
     end

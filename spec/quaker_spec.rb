@@ -1,51 +1,25 @@
 require 'spec_helper'
-require 'fileutils'
+require 'open3'
+require 'yaml'
+
+EXE_PATH = File.expand_path('../../exe/quaker', __FILE__)
+FIXTURES_PATH = File.expand_path('../fixtures', __FILE__)
+
+def exec args
+  cmd = "cd #{FIXTURES_PATH} && bundle exec #{EXE_PATH} #{args}"
+  stdin, stdout, stderr = Open3.popen3(cmd)
+  YAML.load(stdout.read)
+end
 
 describe Quaker do
+  let (:fixtures_dir) {  }
   describe 'Integration' do
-    PREFIX = 'docker/services'
-    FILES = {
-      "all.yml" => """---
-include:
-- infra.yml
-billing:
-  depends_on:
-  - mongo
-  tags:
-  - billing
-      """,
-
-      "infra.yml" => """---
-redis:
-  image: redis
-mongo:
-  image: mongo
-      """
-    }
     it 'outputs correct result' do
-      Dir.mktmpdir do |dir|
-        Dir.chdir dir do
-          FileUtils.mkdir_p PREFIX
-          FILES.each{|name, content|
-            File.open("#{PREFIX}/#{name}", "w") {|f|
-              f.write(content)
-            }
-          }
-          expect{
-            ARGV << "-t"
-            ARGV << "billing"
-            Quaker::run
-          }.to output("""---
-version: '2'
-services:
-  billing:
-    depends_on:
-    - mongo
-  mongo:
-    image: mongo
-""").to_stdout
-        end
-      end
+      spec = exec '-t ui'
+
+      services = spec["services"]
+      expect(services).not_to be_empty
+      expect(services.keys).to contain_exactly 'web', 'redis'
     end
   end
 end
