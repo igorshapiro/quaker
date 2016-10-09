@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'clamp'
+gem 'git_clone_url'
 
 group :test do
   gem "codeclimate-test-reporter", group: :test, require: nil

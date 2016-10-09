@@ -1,3 +1,6 @@
 [submodule "examples/svc1"]
 	path = examples/svc1
 	url = https://github.com/igorshapiro/quaker-svc1.git
+[submodule "spec/fixtures/svc1"]
+	path = spec/fixtures/svc1
+	url = https://github.com/igorshapiro/quaker-svc1
