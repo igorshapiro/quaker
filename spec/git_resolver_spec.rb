@@ -7,6 +7,10 @@ describe Quaker::GitResolver do
       puts `git submodule init && git submodule update`
     end
 
+    after :each do
+      Dir.chdir File.expand_path '../..', __FILE__
+    end
+
     let (:manifest) {
       {
         'svc_by_https' => { 'git' => 'https://github.com/igorshapiro/quaker-svc1' },
