@@ -6,5 +6,5 @@ gemspec
 gem 'clamp'
 
 group :test do
-  gem 'simplecov'
+  gem "codeclimate-test-reporter", group: :test, require: nil
 end
