@@ -1,6 +1,11 @@
 ---
 include:
 - infra.yml
+wildcard_template:
+  environment:
+    DEFAULT_CURRENCY: USD
+  tags:
+  - billing
 warehouse:
   links:
     - mongo

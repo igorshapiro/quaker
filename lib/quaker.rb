@@ -2,6 +2,7 @@ require "quaker/version"
 require "quaker/include"
 require "quaker/tag_filter"
 require "quaker/git_resolver"
+require "quaker/templates"
 require "quaker/compose_file"
 
 module Quaker
@@ -32,6 +33,7 @@ module Quaker
         Dir.chdir dir
 
         spec = Include.new.process spec_file
+        spec = Templates.new.apply spec
         spec = TagFilter.new.filter spec, tags_list
         spec = GitResolver.new.resolve spec
         spec = ComposeFile.new.build spec

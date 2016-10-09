@@ -8,7 +8,13 @@ FIXTURES_PATH = File.expand_path('../fixtures', __FILE__)
 def exec args
   cmd = "cd #{FIXTURES_PATH} && bundle exec #{EXE_PATH} #{args}"
   stdin, stdout, stderr = Open3.popen3(cmd)
-  YAML.load(stdout.read)
+  stdout_content = stdout.read
+  begin
+    YAML.load(stdout_content)
+  rescue Exception => ex
+    STDERR.puts "Error parsing: #{stdout_content}"
+    STDERR.puts "STDERR: #{stderr.read}"
+  end
 end
 
 describe Quaker do
