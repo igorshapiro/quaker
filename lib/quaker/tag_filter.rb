@@ -1,3 +1,5 @@
+require 'quaker/tag_matcher'
+
 module Quaker
   class TagFilter
     def dependencies services_map, name
@@ -9,11 +11,8 @@ module Quaker
     end
 
     def is_tagged_service spec, tags_list
-      svc_tags = spec.delete("tags") || []
-
-      # Skip service if no common tags
-      common = svc_tags & tags_list
-      common && !common.empty?
+      svc_tags = spec.delete('tags') || []
+      TagMatcher.match svc_tags, tags_list
     end
 
     def filter services_map, tags_list
