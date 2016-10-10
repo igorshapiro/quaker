@@ -3,6 +3,7 @@ require "quaker/include"
 require "quaker/tag_filter"
 require "quaker/git_resolver"
 require "quaker/templates"
+require "quaker/path_extensions"
 require "quaker/compose_file"
 
 module Quaker
@@ -36,6 +37,7 @@ module Quaker
         spec = Templates.new.apply spec
         spec = TagFilter.new.filter spec, tags_list
         spec = GitResolver.new.resolve spec
+        spec = PathExtensions.new.expand spec
         spec = ComposeFile.new.build spec
         puts spec
       end
