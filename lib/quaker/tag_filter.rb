@@ -35,7 +35,7 @@ module Quaker
           acc[name] = spec
 
           dependencies(services_map, name)
-            .inject(acc){|acc, d| acc.update(d => services_map[d])}
+            .inject(acc){|_acc, d| _acc.update(d => services_map[d])}
         end
 
         acc
