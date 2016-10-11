@@ -1,13 +1,25 @@
 require 'quaker/tag_matcher'
+require 'quaker/errors'
 
 module Quaker
+  class DependencyResolveError < StandardError
+  end
+
   class TagFilter
     def dependencies services_map, name
       spec = services_map[name]
+      raise MissingServiceError, name unless spec
+
       depends_on = spec["depends_on"] || []
       links = (spec["links"] || []).map{|l| l.split(':')[0]}
       deps = links + depends_on
-      deps + deps.map{|d| dependencies(services_map, d)}.flatten
+      begin
+        deps + deps.map{|d| dependencies(services_map, d)}.flatten
+      rescue MissingServiceError => ex
+        msg = "Error resolving dependency #{ex.message} " +
+          "for service #{name}"
+        raise DependencyResolveError, msg
+      end
     end
 
     def is_tagged_service spec, tags_list
