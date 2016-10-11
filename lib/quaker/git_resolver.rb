@@ -8,10 +8,11 @@ module Quaker
       begin
         uri = GitCloneUrl.parse(url)
 
-        if uri.path.match /^\/?(.*?)\/(.*?)(.git)?$/
+        if uri.path.match(/^\/?(.*?)\/(.*?)(.git)?$/)
           return { username: $1, repo: $2 }
         end
-      rescue URI::InvalidComponentError => ex
+      rescue URI::InvalidComponentError
+        $stderr.puts "ERROR: Invalid git url: #{url}"
       end
       url
     end
@@ -19,8 +20,8 @@ module Quaker
     def find_dir_for_repo repo
       dir = Dir.glob('*')
         .select {|f| File.directory? f}
-        .select {|dir|
-          stdin, stdout, stderr = Open3.popen3("cd #{dir} && git remote -v | awk '{print $2}'")
+        .select {|subdir|
+          _stdin, stdout, _stderr = Open3.popen3("cd #{subdir} && git remote -v | awk '{print $2}'")
           stdout.each_line
             .map(&:strip)
             .map {|l| parse_url(l) }
@@ -32,7 +33,7 @@ module Quaker
     end
 
     def resolve services_map
-      for name, spec in services_map
+      for _, spec in services_map
         git_repo = spec.delete("git")
         next unless git_repo
 

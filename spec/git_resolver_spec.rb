@@ -15,6 +15,7 @@ describe Quaker::GitResolver do
       {
         'svc_by_https' => { 'git' => 'https://github.com/igorshapiro/quaker-svc1' },
         'svc_by_git' => { 'git' => 'git@github.com:igorshapiro/quaker-svc1.git' },
+        'missing_repo' => { 'git' => 'git@github.com:who/missing.git' },
         'invalid_git' => { 'git' => 'git@invalid_git'}
       }
     }
@@ -23,6 +24,7 @@ describe Quaker::GitResolver do
       expect(subject.resolve(manifest)).to eq({
         'svc_by_https' => { 'build' => './svc1' },
         'svc_by_git' => { 'build' => './svc1' },
+        'missing_repo' => { 'build' => nil },
         'invalid_git' => { 'build' => nil }
       })
     end
@@ -30,7 +32,13 @@ describe Quaker::GitResolver do
     it 'writes url parse error to `stderr`' do
       expect {
         subject.resolve(manifest)
-      }.to output("ERROR: Unable to find dir for repo git@invalid_git\n").to_stderr
+      }.to output(/ERROR: Invalid git url: git@invalid_git\n/).to_stderr
+    end
+
+    it 'writes missing repo `stderr`' do
+      expect {
+        subject.resolve(manifest)
+      }.to output(/ERROR: Unable to find dir for repo git@github.com:who\/missing.git\n/).to_stderr
     end
   end
 end
