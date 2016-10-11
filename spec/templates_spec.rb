@@ -44,4 +44,14 @@ describe 'templates' do
   it 'does not merge template with services not matching tag' do
     expect(applied['svc2']).not_to include('environment')
   end
+
+  it 'does not override service tags' do
+    specs['svc1']['environment'] = {'RUBY_ENV' => 'dev'}
+    expect(applied['svc1']).to include({
+      'environment' => {
+        'RUBY_ENV' => 'dev',
+        'NODE_ENV' => 'development'
+      }
+    })
+  end
 end

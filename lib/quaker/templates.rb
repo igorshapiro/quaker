@@ -1,4 +1,5 @@
 require 'quaker/tag_matcher'
+require 'deep_merge'
 
 module Quaker
   class Templates
@@ -7,17 +8,17 @@ module Quaker
       services
         .reject {|name, v| template?(name)}
         .inject({}) {|acc, (name, spec)|
-          acc.update(name => extend_with_matchine_templates(spec, templates))
+          acc.update(name => extend_with_matching_templates(spec, templates))
         }
     end
 
-    def extend_with_matchine_templates service, templates
+    def extend_with_matching_templates service, templates
       templates
         .select {|name, spec| Quaker::TagMatcher::match(service["tags"], spec["tags"])}
         .inject(service) {|svc, (_, spec)|
           filtered_template_content = spec
             .select{|name, spec| name != 'tags' }
-          svc.merge(filtered_template_content)
+          svc.deep_merge(filtered_template_content)
         }
     end
 

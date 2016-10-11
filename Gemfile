@@ -5,6 +5,7 @@ gemspec
 
 gem 'clamp'
 gem 'git_clone_url'
+gem 'deep_merge'
 
 group :test do
   gem "codeclimate-test-reporter", group: :test, require: nil
