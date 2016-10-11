@@ -2,7 +2,7 @@ module Quaker
   class PathExtensions
     def expand_path volumes_desc, build_path
       parts = volumes_desc.split(':')
-      parts[0].gsub! /^\~/, build_path
+      parts[0].gsub!(/^\~/, build_path)
       parts.join(':')
     end
 
@@ -17,7 +17,7 @@ module Quaker
     end
 
     def expand services
-      services.each {|name, spec| expand_service_volumes(spec) }
+      services.each {|_name, spec| expand_service_volumes(spec) }
     end
   end
 end
