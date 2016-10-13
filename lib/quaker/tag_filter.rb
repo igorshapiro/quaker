@@ -30,16 +30,11 @@ module Quaker
     def filter services_map, tags_list
       return services_map if !tags_list || tags_list.empty?
 
-      services_map.inject({}){|acc, (name, spec)|
-        if is_tagged_service(spec, tags_list)
-          acc[name] = spec
-
-          dependencies(services_map, name)
-            .inject(acc){|_acc, d| _acc.update(d => services_map[d])}
-        end
-
-        acc
-      }
+      services_map
+        .select {|_, spec| is_tagged_service(spec, tags_list) }
+        .map {|name, _| [name] + dependencies(services_map, name) }
+        .flatten
+        .inject({}) {|acc, (name, spec)| acc.update(name => services_map[name])}
     end
   end
 end
