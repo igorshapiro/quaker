@@ -6,6 +6,7 @@ require "quaker/templates"
 require "quaker/path_extensions"
 require "quaker/compose_file"
 
+#:nocov:
 module Quaker
   require 'clamp'
 
@@ -45,3 +46,4 @@ module Quaker
     end
   end
 end
+#:nocov:
