@@ -27,12 +27,17 @@ module Quaker
       TagMatcher.match svc_tags, tags_list
     end
 
-    def filter services_map, tags_list
+    def filter services_map, tags_list, options = {}
       return services_map if !tags_list || tags_list.empty?
+
+      include_tagged_services = !options[:only_deps]
 
       services_map
         .select {|_, spec| is_tagged_service(spec, tags_list) }
-        .map {|name, _| [name] + dependencies(services_map, name) }
+        .map {|name, _|
+          service = include_tagged_services ? [name] : []
+          service + dependencies(services_map, name)
+        }
         .flatten
         .inject({}) {|acc, (name, spec)| acc.update(name => services_map[name])}
     end

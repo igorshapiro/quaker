@@ -14,6 +14,7 @@ module Quaker
       parameter "[SPEC_FILE]", "Extended docker-compose file"
       option %w(--tags -t), "TAGS", "Filter services (and dependencies) by tag", multivalued: true
       option %w(--dir -d), "DIR", "Specify base directory"
+      option %w(--only-deps -T), :flag, "Include only dependencies"
 
       def default_spec_file
         File.expand_path('docker/services/all.yml', dir)
@@ -35,7 +36,7 @@ module Quaker
 
         spec = Include.new.process spec_file
         spec = Templates.new.apply spec
-        spec = TagFilter.new.filter spec, tags_list
+        spec = TagFilter.new.filter spec, tags_list, only_deps: only_deps?
         spec = GitResolver.new.resolve spec
         spec = PathExtensions.new.expand spec
         spec = ComposeFile.new.build spec
