@@ -35,4 +35,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.10"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec"
+
+  spec.add_runtime_dependency "deep_merge", "~> 1.1.1"
+  spec.add_runtime_dependency "git_clone_url", "~> 2.0.0"
+  spec.add_runtime_dependency "clamp", "~> 1.0.1"
 end
